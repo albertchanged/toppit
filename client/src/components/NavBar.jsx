@@ -43,15 +43,12 @@ export default class NavBar extends React.Component {
   render() {
     // let name = (this.props.currentUser && (this.props.currentUser.fullName || this.props.currentUser.username) || '');
     let name = store.getState().user.user.username;
-
     let photoUrl = (this.props.currentUser && this.props.currentUser.photo) || defaultPhoto;
-
     const trigger = (
       <span>
         <Image avatar src={photoUrl} /> {name}
       </span>
     );
-
     let subtoppits = [
       {value: 'introductions', text: 'introductions'},
       {value: 'chatter', text: 'chatter'},
@@ -74,7 +71,6 @@ export default class NavBar extends React.Component {
         </Menu.Item>
         <Menu.Item id="subtoppitNavigationContainer">
           <Dropdown placeholder='Select subtoppit' id="subtoppitNavigation" onChange={this.selectSubtoppit.bind(this)} fluid search selection options={subtoppits} />
-          {/*<Button id="legacyProjectSubtoppit" onClick={(e) => this.handleSubtoppitClick(e.target.id)}> Legacy Project </Button>*/}
         </Menu.Item>
         <Menu.Menu position='right'>
           <Menu.Item>

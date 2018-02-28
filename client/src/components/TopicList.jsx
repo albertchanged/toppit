@@ -6,9 +6,6 @@ import { bindActionCreators } from 'redux';
 import store from '../js/store.js';
 
 class TopicList extends React.Component {
-  // var topicList = store.getState().topicList.filteredTopicList;
-  // console.log('topic list props....', props);
-
   constructor(props) {
     super(props);
     this.subtoppit = this.props.match.params.subtoppit;
@@ -28,17 +25,14 @@ class TopicList extends React.Component {
 
   render() {
     // this.subtoppit = this.props.match.params.subtoppit;
-    // console.log('subtoppit....', this.subtoppit);
     if (!this.props.match.params.subtoppit) {
       this.subtoppit = '';
     }
     if (this.subtoppit && this.props.subtoppitList[0]) {
-      // console.log('setting to subtoppit list!....');
       this.topicList = this.props.subtoppitList;
     } else if (this.subtoppit && !this.props.subtoppitList[0]) {
       this.topicList = [];
     } else {
-      // console.log('subtoppit....', this.subtoppit);
       this.topicList = this.props.filteredTopicList;
     }
     return (

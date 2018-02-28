@@ -7,7 +7,6 @@ import http from 'axios';
 import { setTopicComments } from '../js/actions/topicListActions.js';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-// import { setNestedCommentsCopy } from '../js/actions/commentActions.js';
 import CommentGroup from 'semantic-ui-react/dist/commonjs/views/Comment/CommentGroup';
 
 import moment from 'moment';
@@ -18,7 +17,6 @@ class CommentList extends React.Component {
     super(props);
   }
   render() {
-    // console.log(this.props.comments);
     let comment = store.getState().comment;
     return (
       <CommentGroup>

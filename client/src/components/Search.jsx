@@ -22,7 +22,6 @@ class Search extends React.Component {
       this.props.toggleIsLoading();
     }, 1000);
     var topicListCopy = store.getState().topicList.fullTopicList;
-    console.log('full topic list', topicListCopy);
     var filteredArr = topicListCopy.filter(topic => {
       if (topic.headline.toLowerCase().includes(searchValue) || 
         topic.description.toLowerCase().includes(searchValue) || 
@@ -39,7 +38,7 @@ class Search extends React.Component {
   }
 
   render() {
-    return(
+    return (
       <Form onSubmit={this.handleSubmit}>
         <Input focus placeholder='Search...' onChange={this.handleChange} />
         <Button icon type='submit'color='blue' size='large' compact loading={store.getState().search.isLoading}>

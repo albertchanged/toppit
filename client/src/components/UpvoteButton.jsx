@@ -1,11 +1,8 @@
 import React from 'react'
 import { Card, Button, Icon } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
-// import store from '../js/store.js';
 import { connect } from 'react-redux';
 import store from '../js/store.js';
-
-// import { toggleVote } from '../js/actions/voteActions.js' 
 
 class UpvoteButton extends React.Component {
   constructor(props) {
@@ -21,7 +18,6 @@ class UpvoteButton extends React.Component {
   }  
 
   handleClick() {
-    // console.log('store right after click...', store.getState());
     var changeInVotes = 1;
     if (this.props.currentUser && this.props.topic.upvoteUsers.includes(this.props.currentUser.id)) {
       changeInVotes = -1;
@@ -41,16 +37,12 @@ class UpvoteButton extends React.Component {
         labelPosition='right'
         onClick={ this.handleClick.bind(this)}
       />   
-    )
+    );
   }
 }
 
 const mapStateToProps = (state) => ({
   currentUser: state.user.user
 });
-
-// const mapDispatchToProps = (dispatch) => {
-//   return bindActionCreators({ toggleVote }, dispatch);
-// };
 
 export default connect(mapStateToProps)(UpvoteButton);

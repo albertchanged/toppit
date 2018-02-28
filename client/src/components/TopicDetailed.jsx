@@ -39,13 +39,12 @@ class TopicDetailed extends React.Component {
         this.props.setDetailedCommentList(data.commentId);
       })
       .catch((err) => {
-        console.log(err.message);
+        console.error(err.message);
       });
 
     let topicId = store.getState().topicList.selectedTopic._id;
     http.get(`/api/topic/${topicId}`)
       .then((data) => {
-        console.log('This is the list of all comments', data);
         this.props.setTopicComments(data.data.commentId);
       })
       .catch((err) => {
@@ -67,22 +66,19 @@ class TopicDetailed extends React.Component {
       upvotes: 0
     };
     //http request to database to add comment to topic
-    // console.log(newComment);
-
-
     http.post(`/api/topic/${this.props.topicId}`, newComment)
       .then( (result) => {
-        console.log('success!', result);
         this.props.addCommentToFront(newComment);
         this.getAllTopicComments();
       })
       .catch( (error) => {
-        console.log(error);
+        console.error(error);
       });
   }  
   
   render() {
-    let name, photoUrl;
+    let name;
+    let photoUrl;
     let selectedTopic = store.getState().topicList.selectedTopic;
     let detailedTopic = store.getState().topicList.detailedTopic;
 
@@ -116,7 +112,6 @@ class TopicDetailed extends React.Component {
                   <Card.Content extra>
                     <UpvoteButton 
                       topic={selectedTopic} 
-                      // upvote={this.props.upvote} 
                       currentUser={store.getState().user.user.id}/>            
                     <Icon name='comments' />
                     {selectedTopic.commentId.length + store.getState().comment.nestedCommentsCopy.length} {(selectedTopic.commentId.length + store.getState().comment.nestedCommentsCopy.length === 1) ? 'comment' : 'comments'}
@@ -159,7 +154,6 @@ class TopicDetailed extends React.Component {
     );
   }
 }
-
 
 const mapStateToProps = (state) => ({
   selectedTopic: state.topicList.selectedTopic,

@@ -12,7 +12,6 @@ import { setSignInError, setSignUpError } from '../js/actions/userActions.js';
 class Login extends React.Component {
   constructor(props) {
     super(props);
-
     this.onSignIn = this.onSignIn.bind(this);
     this.onSignUp = this.onSignUp.bind(this);
   }
@@ -31,7 +30,7 @@ class Login extends React.Component {
         if (err.response.status === 401) {
           this.props.setSignInError('Incorrect username or password entered');
         } else {
-          console.log(err);
+          console.error(err);
         }
       });
   }
@@ -57,7 +56,7 @@ class Login extends React.Component {
             this.props.setSignUpError('Username already taken, please choose a different one');
           }
         } else {
-          console.log(err);
+          console.error(err);
         }
       });
   }
