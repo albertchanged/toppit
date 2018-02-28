@@ -51,13 +51,13 @@ class Topic extends React.Component {
   }
   
   renderTopicDetailedView () {
-    //react router something?
     this.props.history.push(`/topic/${this.props.topic._id}`);
     this.props.onDetailedTopic(this.props.topic);
   }
 
   render () {
-    let name, photoUrl;
+    let name;
+    let photoUrl;
 
     if (this.props.topic.authorId) {
       name = (this.props.topic.authorId && (this.props.topic.authorId.fullName || this.props.topic.authorUsername) || '');
@@ -92,7 +92,6 @@ class Topic extends React.Component {
               &nbsp;
               <a onClick={this.renderTopicDetailedView}>
                 <Icon name='comments'/>
-                {/* {(store.getState().topicList.commentList.length === 1) ? 'comment' : 'comments' } */}
                 {store.getState().comment.nestedCommentsCopy.length + this.props.topic.commentId.length} {(store.getState().comment.nestedCommentsCopy.length + this.props.topic.commentId.length === 1) ? 'comment' : 'comments' }
               </a>
               &nbsp;&nbsp;

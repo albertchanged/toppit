@@ -55,7 +55,7 @@ class Chat extends React.Component {
           <Container textAlign='left'>
             {messages.map( (message) => (
               <div>
-                {message[0]}: {message[1]}
+                <span className="randomColor"><strong>{message[0]}</strong></span>: {message[1]}
               </div>
             ))}
           </Container>

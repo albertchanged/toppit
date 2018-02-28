@@ -15,14 +15,12 @@ class MyComment extends React.Component {
     this.onReply = this.onReply.bind(this);
   }
   componentDidMount() {
-    console.log(this.props.comment.comments);
     this.getAllComments();
   }
   getAllComments() {
     let topicId = store.getState().topicList.selectedTopic._id;
     let author = this.props.comment.authorId.username || this.props.comment.authorUsername;
     let text = this.props.comment.text;
-    // console.log(text);
     let nestedComments = [];
 
     http.get(`/api/comments/${topicId}/${author}`, { params: { text: this.props.comment.text }})
@@ -32,7 +30,6 @@ class MyComment extends React.Component {
         
         if (this.props.comment.comments.length > 0) {
           let promises = this.props.comment.comments.map((commentId) => {
-            // console.log(comment);
             return http.get(`/api/comments/${commentId}`)
               .then((nested) => {
                 console.log('This is the nested comment', nested.data);
@@ -46,9 +43,7 @@ class MyComment extends React.Component {
           });
           Promise.all(promises)
             .then((data) => {
-              console.log(data);
               this.props.setNestedCommentsCopy(data);
-              // this.props.addNestedToFront(data[data.length - 1]);
             })
             .catch((err) => {
               console.error(err);
@@ -72,8 +67,6 @@ class MyComment extends React.Component {
   }
   onReply(text) {
     let topicId = store.getState().topicList.selectedTopic._id;
-    // console.log(store.getState().comment);
-
     let comment = {
       text: text,
       timeStamp: new Date(),
@@ -82,8 +75,6 @@ class MyComment extends React.Component {
       parentId: this.props.comment._id,
       comments: []
     };
-    // console.log('Comment in component',comment);
-    
     http.post(`/api/topic/${topicId}/${this.props.comment._id}`, comment)
       .then((data) => {
         console.log('Data', data);
@@ -105,63 +96,20 @@ class MyComment extends React.Component {
       upvotes: 0
     };
     //http request to database to add comment to topic
-
     http.post(`/api/topic/${this.props.topicId}`, newComment)
       .then( (result) => {
-        console.log('success!', result);
         this.props.addCommentToFront(newComment);
         this.getAllTopicComments();
       })
       .catch( (error) => {
-        console.log(error);
+        console.error(error);
       });
   } 
-  // nestComment(nested) {
-  //   console.log(nested);
-  //   let parentId;
-  //   for (var i = 0; i < nested.length; i++) {
-  //     // if ()
-  //     parentId = nested[i]._id;
-  //   }
-  //   let comment = {
-  //     text: store.getState().comment.commentText,
-  //     timeStamp: new Date(),
-  //     authorId: { _id: store.getState().user.user.id, username: store.getState().user.user.username },
-  //     authorUsername: store.getState().user.user.username,
-  //     parentId: this.props.comment._id,
-  //     comments: []
-  //   };
-  //   console.log('Comment in component',comment);
-  //   let topicId = store.getState().topicList.selectedTopic._id;
-  //   http.post(`/api/topic/${topicId}/${this.props.comment._id}`, comment)
-  //     .then((data) => {
-  //       console.log('Data', data);
-  //       this.getAllComments();
-  //       this.props.setShowReply(false);
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //     });
-  // }
   render() {
-    console.log(this.props.comment);
     let comment = this.props.comment;
-    // console.log(this.props.comments);
     let parent = store.getState().comment;
     let nested = store.getState().comment.nestedCommentsCopy;
     let nestedComments = [];
-
-    // if (nested.length > 0) {
-    //   nestedComments = nested.map((child, index) => (
-    //     child.comments && 
-    //       <MyComment
-    //         comment={child}
-    //         key={index}
-    //         comments={child.comments}
-    //       />
-    //   ));
-    // }
-    console.log('Nested in comment', nested);
     return (
       <div>
         <Comment.Group>
@@ -183,12 +131,6 @@ class MyComment extends React.Component {
                     <Button onClick={() => this.onReply(store.getState().comment.commentText)} content='Add Reply' labelPosition='left' icon='edit' primary />
                   </Form>
               }
-              {/* {
-                comment.comments && comment.comments.length > 0 && nested.map((child, index) => (
-                  <MyComment comment={child} key={index} comments={child.comments} onClick={this.toggleShowNestedReply.bind(this)}/>
-                ))
-              } */}
-              {/* { (comment.comments && comment.comments.length > 0) ? <CommentList comments={nested} /> : null } */}
               {
                 this.props.comment.comments && this.props.comment.comments.length > 0 && nested.map((child, index) => {
                   console.log(child, index);
@@ -230,12 +172,6 @@ class MyComment extends React.Component {
             </Comment.Content>
           </Comment>
         </Comment.Group>
-        {/* <CommentList comments={comment.comments} />; */}
-        {/* {
-          comment.comments && comment.comments.length > 0 && nested.map((child) => {
-            return <MyComment key={child._id} comment={child} />;
-          })
-        } */}
       </div>
     );
   }
@@ -254,4 +190,3 @@ const mapDispatchToProps = (dispatch) => {
 
 var NestedComment = connect(mapStateToProps, mapDispatchToProps)(MyComment);
 export default NestedComment;
-// export default connect(mapStateToProps, mapDispatchToProps)(MyComment);

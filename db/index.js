@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 const options = { promiseLibrary: require('bluebird') };
-
 const uri = process.env.MONGODB_URI || `mongodb://localhost/toppit`;
 const passportLocalMongoose = require('passport-local-mongoose');
 var db = mongoose.createConnection(uri, options);
@@ -50,9 +49,6 @@ userSchema.plugin(passportLocalMongoose);
 let Topic = db.model('Topic', topicSchema);
 let User = db.model('User', userSchema);
 let Comment = db.model('Comment', commentSchema);
-// let NestedComment = db.model('NestedComment', nestedCommentSchema);
-//let List = db.model('List', listchema);
-//let Organization = db.model('Organization', sessionSchema);
 
 let getTopics = (callback) => {
 
@@ -60,7 +56,7 @@ let getTopics = (callback) => {
     .populate('authorId')
     .exec(function(err, result) {
       if (err) {
-        console.log(err.message);
+        console.error(err.message);
         callback(err, null);
         return;
       }
@@ -70,7 +66,6 @@ let getTopics = (callback) => {
 };
 
 let getTopicsInSubtoppit = (subtoppit, callback) => {
-  console.log('in database...');
   Topic.find({'subtoppit': subtoppit}, null, {sort: '-timeStamp'}).exec((err, topics) => {
     if (err) {
       callback(err, null);
@@ -84,7 +79,7 @@ let getTopicsInSubtoppit = (subtoppit, callback) => {
 let getUser = (query, callback) => {
   User.findOne(query, (err, user) => {
     if (err) {
-      console.log(err.message);
+      console.error(err.message);
       callback(err, null);
       return;
     }
@@ -95,13 +90,13 @@ let getUser = (query, callback) => {
 let findOrCreateUser = (query, attributes, callback) => {
   User.findOneAndUpdate(query, attributes, { new: true, upsert: true }, (err, user) => {
     if (err) {
-      console.log(err.message);
+      console.error(err.message);
       callback(err, null);
       return;
     }
     callback(null, user);
   });
-}
+};
 
 let getSelectTopics = (query, callback) => {
   var sortParams = {};
@@ -114,7 +109,7 @@ let getSelectTopics = (query, callback) => {
   }
   Topic.find(filterParams).sort(sortParams).populate('authorId').exec(function (err, results) {
     if (err) {
-      console.log(err.message);
+      console.error(err.message);
       callback(err, null);
     } else {
       callback(null, results);
@@ -123,14 +118,14 @@ let getSelectTopics = (query, callback) => {
 };
 
 let getTopicById = (topicId, callback) => {
-  // find topic instancy by topicId, populate commentId, then inside commentId Values, populate authorId
+  // find topic instance by topicId, populate commentId, then inside commentId Values, populate authorId
   Topic.
     findById(topicId).
     populate('authorId').
     populate({path : 'commentId', populate : {path : 'authorId'}}).
     exec(function (err, topic) {
       if (err) {
-        console.log(err.message);
+        console.error(err.message);
         callback(err, null);
         return;
       }
@@ -148,7 +143,7 @@ let saveTopic = (topic, callback) => {
 
   Topic.create(newTopic, (err, result) => {
     if (err) {
-      console.log(err.message);
+      console.error(err.message);
       callback(err, null);
     }
     callback(null, result);
@@ -167,13 +162,13 @@ const updateVoteCount = (id, currentUser, callback) => {
     }, 
     (err, doc) => {
       if (err) {
-        console.log(err)
+        console.error(err);
         callback(err, null);
         return;
       }
-      callback(null, doc)
+      callback(null, doc);
     }
-  )
+  );
 };
 
 const removeUpvote = (id, currentUser, callback) => {
@@ -188,7 +183,7 @@ const removeUpvote = (id, currentUser, callback) => {
     },
     (err, doc) => {
       if (err) {
-        console.log(err);
+        console.error(err);
         callback(err, null);
         return;
       }
@@ -198,12 +193,10 @@ const removeUpvote = (id, currentUser, callback) => {
 };
 
 let getNestedComment = (commentId, callback) => {
-  console.log('Comment id', commentId);
   Comment.findById(commentId).exec((err, comment) => {
     if (err) {
       callback(err, null);
     } else {
-      console.log('Got nested comment from db', comment);
       callback(null, comment);
     }
   });
@@ -227,12 +220,11 @@ let replyToComment = (commentObj, topicId, commentId, callback) => {
   console.log(commentModel);
   Topic.findById(topicId).exec((err, topic) => {
     if (err) {
-      console.log('Error getting topic', err);
+      console.error('Error getting topic', err);
     } else {
-      // console.log('Topic', topic);
       Comment.update({ '_id': commentId }, {'$push': { 'comments': commentModel._id }}, (err, nested) => {
         if (err) {
-          console.log('Could not update the commentId array', err);
+          console.error('Could not update the commentId array', err);
           callback(err, null);
         } else {
           console.log('Updated the commentId array!', nested);
@@ -246,14 +238,12 @@ let replyToComment = (commentObj, topicId, commentId, callback) => {
 let getOneComment = (text, topicId, author, callback) => {
   Topic.findOne({ _id: topicId }, (err, topic) => {
     if (err) {
-      console.log('Could not find topic', err);
+      console.error('Could not find topic', err);
     } else {
-      console.log(topic);
       Comment.findOne({ text: text, username: author }, (err, comment) => {
         if (err) {
           callback(err, null);
         } else {
-          console.log('Got the comment!');
           callback(null, comment);
         }
       });
@@ -277,7 +267,7 @@ let saveComment = (commentObj, topicId, callback) => {
   // find User instance by username
   User.findOne({ username: commentObj.username}, (err, doc) => {
     if (err) {
-      console.log(err);
+      console.error(err);
       return;
     }
     // then add that instances object id 'doc._id' to the comments authorId property
@@ -290,18 +280,14 @@ let saveComment = (commentObj, topicId, callback) => {
       username:   commentObj.username,
       upvotes:    commentObj.upvotes
     };
-    console.log('Being created before create', comment);
     Comment.create(comment, (err, result) => {
       if (err) {
         console.log(err.message);
         callback(err, null);
       }
-      console.log("Comment Save Success");
-  
       // create reference from authorId property to user object
       Comment.populate(comment, {path:"authorId"}, (err, commentData) => {
         if (err) {
-          console.log(err.message);
           callback(err, null);
           return;
         }
@@ -313,21 +299,20 @@ let saveComment = (commentObj, topicId, callback) => {
   // Add 'comment._id' to topic instance for comment-object reference
   // - Find topic by topicId  
   Topic.findById(topicId, (err, doc) => {
-    if(err){
-      console.log(err);
+    if (err) {
+      console.error(err);
     } else {
       // - Insert comment._id into Topic
       doc.commentId.push(comment._id);      
       // - Update Database
       Topic.update({_id: topicId}, doc, (err, raw) => {
         if (err) {
-          console.log(err);
+          console.error(err);
         }
         console.log("Successful update of topic", raw);       
       });
     }
   });
-
 };
 
 module.exports.saveComment = saveComment;

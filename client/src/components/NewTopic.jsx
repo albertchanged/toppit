@@ -42,8 +42,6 @@ class NewTopic extends React.Component {
   }
 
   onEmotion(e, {value}) {
-    // console.log('on emotion...', e)
-    // console.log('value...', {value});
     this.props.setEmotion(value);
   }
 
@@ -76,11 +74,6 @@ class NewTopic extends React.Component {
     if (errors) {
       return;
     }
-    // if (document.querySelector(".form .dropdown .text").innerHTML = '') {
-    //   console.log(document.querySelector(".form .dropdown .text"));
-    //   return;
-    // }
-
     let topic = store.getState().topic.topic;
     let user = store.getState().user.user;
 
@@ -98,7 +91,6 @@ class NewTopic extends React.Component {
       topicObj.authorId = (!topic.anon) ? user.id : null;
       topicObj.authorUsername = (!topic.anon) ? user.username : 'Anonymous';
 
-      console.log('submitting...', topicObj);
       this.props.onNewTopic(topicObj);
     }
     this.props.setSubtoppitToPostTo('');
@@ -114,9 +106,7 @@ class NewTopic extends React.Component {
   render() {
     const anonText = 'Post Anonymously';
     let topic = store.getState().topic.topic;
-    console.log(topic);
     let photoUrl;
-    console.log(this.props);
     if (topic.anonymous) {
       photoUrl = anonPhotos[Math.floor(Math.random() * anonPhotos.length)];
     } else {

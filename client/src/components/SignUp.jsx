@@ -24,17 +24,12 @@ const colors = {
 class SignUp extends React.Component {
   constructor(props) {
     super(props);
-    // Wish I could make owasp colors work without state :(
-    this.state = {
-      pwStrengthColor: 'grey'
-    };
     this.onUsernameChange = this.onUsernameChange.bind(this);
     this.onEnterPassword = this.onEnterPassword.bind(this);
     this.onEnterConfirm = this.onEnterConfirm.bind(this);
     this.onSignUp = this.onSignUp.bind(this);
   }
   onSignUp() {
-    console.log('Signing up!');
     let user = store.getState().user.user;
     if (user.password !== user.confirm) {
       this.props.setUserPwError(true);
@@ -45,7 +40,6 @@ class SignUp extends React.Component {
   }
 
   onUsernameChange(e, { value }) {
-    // console.log('Entering username', value);
     this.props.setUsernameError(false);
     this.props.setUserPwError(false);
     this.props.setUsername(value);
@@ -54,12 +48,9 @@ class SignUp extends React.Component {
   onEnterPassword(e, { value }) {
     var strength = owasp.test(value);
     let color = colors[strength.passedTests.length][0];
-    console.log(strength.passedTests);
     let phrase = colors[strength.passedTests.length][1];
     
     this.props.setUserPwStrength(strength.passedTests.length / 6 * 100);
-    // this.props.setUserPwStrengthColor(color);
-    // console.log(store.getState().user.user.pwStrengthColor);
     this.props.setUserPwStrengthPhrase(phrase);
     this.props.setUserPwError(false);
     this.props.setUsernameError(false);
@@ -76,7 +67,6 @@ class SignUp extends React.Component {
 
   render() {
     let user = store.getState().user.user;
-    console.log(user);
     return (
       <Card raised centered>
         <Segment padded size='large'>
@@ -94,7 +84,6 @@ class SignUp extends React.Component {
               type='password' 
               label='password' 
               name='password' 
-              // value={this.state.password} 
               onChange={this.onEnterPassword} 
               autoComplete='new-password' 
               placeholder='password'
@@ -111,7 +100,6 @@ class SignUp extends React.Component {
               type='password' 
               label='confirm password' 
               name='confirmPassword' 
-              // value={this.state.ConfirmPassword} 
               onChange={this.onEnterConfirm} 
               autoComplete='new-password' 
               placeholder='password'
@@ -151,5 +139,4 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
-// export default SignUp;
 

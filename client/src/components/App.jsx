@@ -43,7 +43,6 @@ class App extends React.Component {
   }
 
   getAllTopics() {
-    console.log('getting all topics');
     return http.get('/api/topics')
       .then(({ data }) => {
         this.props.changeSearchedList(data);
@@ -96,14 +95,12 @@ class App extends React.Component {
     http.post('/api/topic', topic)
       .then(({data}) => {
         //** need to rerender page
-        console.log('response from server after adding new topic...', data);
         this.props.addTopicToListFront(data);
         this.props.changeSearchedList(store.getState().topicList.fullTopicList);
         this.props.changeFilteredList(store.getState().topicList.fullTopicList);
-        console.log('Successfully posted ', data);
       })
       .catch((err) => {
-        console.log(err.message);
+        console.error(err.message);
       });
   }
 
@@ -120,7 +117,7 @@ class App extends React.Component {
         this.createNewFilteredTopicList(upvoteOrDownvote, increment, currentUser, topicId);
       })
       .catch( (error) => {
-        console.log(error);
+        console.error(error);
       });
     
   }
@@ -128,7 +125,6 @@ class App extends React.Component {
   addUpvoteAndUser(topic, userId) {
     topic.upvotes += 1;
     topic.upvoteUsers.push(userId);
-    // console.log('topic......', topic);
     return topic;
   }
 
@@ -166,9 +162,6 @@ class App extends React.Component {
     }
     this.props.changeFilteredList(newFilteredTopicList);
   }
-
-  downVote (topicId) {
-  }  
 
   topFunction() {
     document.body.scrollTop = 0;

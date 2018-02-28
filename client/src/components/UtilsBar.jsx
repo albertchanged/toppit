@@ -4,9 +4,7 @@ import FilterList from './FilterList.jsx';
 import { Menu } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { setFilter, setSort } from '../js/actions/utilsBarActions.js';
-
 import { changeFilteredList } from '../js/actions/topicListActions.js';
-
 import { bindActionCreators } from 'redux';
 import store from '../js/store.js';
 
@@ -35,7 +33,6 @@ class UtilsBar extends React.Component {
     //determines how to sort list by sortBy value
     if (sortBy === 'upvotes') {
       newFilteredTopicList = this.sortTopicListByUpvotes(searchedTopicList);
-      // console.log('SORTED BY UPVOTES...', newFilteredTopicList);
     } else if (sortBy === 'timeStamp') {
       newFilteredTopicList = this.sortTopicListByTimeStamp(searchedTopicList);
     }

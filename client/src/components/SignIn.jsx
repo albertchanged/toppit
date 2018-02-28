@@ -15,18 +15,15 @@ class SignIn extends React.Component {
   }
 
   onSignIn() {
-    console.log('Signing in!');
     let user = store.getState().user.user;
     this.props.onSignIn(user.username, user.password);
   }
 
   onUsernameChange(e, { value }) {
-    // console.log(value);
     this.props.setUsername(value);
   }
 
   onPasswordChange(e, { value }) {
-    // console.log(value);
     this.props.setUserPassword(value);
   }
 
@@ -41,7 +38,6 @@ class SignIn extends React.Component {
             <Form.Input 
               label='username' 
               name='username' 
-              // value={this.state.username} 
               onChange={this.onUsernameChange} 
               autoComplete='username' 
               placeholder='username' 
@@ -50,7 +46,6 @@ class SignIn extends React.Component {
               type='password' 
               label='password' 
               name='password' 
-              // value={this.state.password} 
               onChange={this.onPasswordChange} 
               autoComplete='current-password' 
               placeholder='password' />

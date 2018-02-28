@@ -38,14 +38,12 @@ export default function reducer(state = {
       }
     }
     case 'ADD_NESTED_TO_FRONT': {
-      // console.log('adding topic to list front');
       return {
         ...state,
         nestedCommentsCopy: state.nestedCommentsCopy.concat(action.payload)
       }
     }
     case 'SET_CONTAINS_OBJ': {
-      // console.log('Setting contains obj!');
       return {
         ...state,
         containsObj: action.payload
